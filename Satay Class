@@ -1,0 +1,95 @@
+package baocateringtest2; 
+
+  
+
+public class satayClass { 
+
+    private char[] satayType; 
+
+    private int[] satayQuantity; 
+
+  
+
+    public satayClass(char[] satayTypes, int[] satayQuantity) { 
+
+        this.satayType = satayTypes; 
+
+        this.satayQuantity = satayQuantity; 
+
+    } 
+
+    //getter and setter 
+
+    public char[] getSatayTypes() { 
+
+        return satayType; 
+
+    } 
+
+  
+
+    public void setSatayTypes(char[] satayType) { 
+
+        this.satayType = satayType; 
+
+    } 
+
+  
+
+    public int[] getSatayQuantities() { 
+
+        return satayQuantity; 
+
+    } 
+
+  
+
+    public void setSatayQuantities(int[] satayQuantities) { 
+
+        this.satayQuantity = satayQuantities; 
+
+    } 
+
+  
+
+    public double getCostPerStick(char satayType) { 
+
+        switch (Character.toLowerCase(satayType)) { 
+
+            case 'c': 
+
+                return 0.80; 
+
+            case 'l': 
+
+                return 0.90; 
+
+            case 'b': 
+
+                return 1.00; 
+
+            default: 
+
+                return 0.00; 
+
+        } 
+
+    } 
+
+  
+
+    public double calculateTotalCost() { 
+
+        double totalCost = 0.0; 
+
+        for (int i = 0; i < satayType.length; i++) { 
+
+            totalCost += satayQuantity[i] * getCostPerStick(satayType[i]); 
+
+        } 
+
+        return totalCost; 
+
+    } 
+
+} 
