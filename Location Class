@@ -1,0 +1,71 @@
+package baocateringtest2; 
+
+  
+
+public class locationClass { 
+
+    private String stateType; 
+
+  
+
+    public locationClass(String stateType) { 
+
+        this.stateType = stateType; 
+
+    } 
+
+    //getter and setter 
+
+    public String getStateType() { 
+
+        return stateType; 
+
+    } 
+
+  
+
+    public void setStateType(String stateType) { 
+
+        this.stateType = stateType; 
+
+    } 
+
+   
+
+    public double calcLocationFee() { 
+
+        if (stateType != null) { 
+
+            switch (stateType.toLowerCase()) { 
+
+                case "kl": 
+
+                case "selangor": 
+
+                    return 0; 
+
+                case "perak": 
+
+                case "negeri sembilan": 
+
+                case "malacca": 
+
+                    return 100; 
+
+                case "johor": 
+
+                    return 150; 
+
+                default: 
+
+                    return 0; 
+
+            } 
+
+        } 
+
+        return 0; 
+
+    } 
+
+} 
