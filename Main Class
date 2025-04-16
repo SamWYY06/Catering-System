@@ -1,0 +1,491 @@
+package baocateringtest2; 
+
+  
+
+import java.util.*; 
+
+  
+
+public class BaoCateringtest2 { 
+
+    //global variable initialization 
+
+    private static char packageType; 
+
+    private static int pax; 
+
+    private static String stateType; 
+
+    private static char[] satayTypes = new char[3]; 
+
+    private static int[] satayQuantities = new int[3]; 
+
+    private static double totalCost; 
+
+    private static int[][] salesData = new int[2][6]; //2 rows (package A and B) , 6 columns (package type, pax, chicken, lamb, beef, total cost) 
+
+     
+
+    public static void main(String[] args) { 
+
+        packageClass packageClass1 = new packageClass(packageType, pax); 
+
+        satayClass satayOrder1 = new satayClass(satayTypes, satayQuantities);   
+
+        locationClass locationClass1 = new locationClass(stateType); 
+
+         
+
+        Scanner scanner = new Scanner(System.in); 
+
+        int option = 0; 
+
+         
+
+        //GUI functions 
+
+        System.out.println("\tBaoCatering Order System"); 
+
+  
+
+        do { 
+
+            System.out.println("1. Display Price Scheme"); 
+
+            System.out.println("2. Process Orders"); 
+
+            System.out.println("3. Generate Sales Report"); 
+
+            System.out.println("4. Exit"); 
+
+  
+
+            System.out.print("Option: "); 
+
+            // Check if there's an integer next 
+
+            if (scanner.hasNextInt()) { 
+
+                option = scanner.nextInt(); 
+
+            } else { 
+
+                System.out.println("Invalid input. Please enter a number between 1 and 4."); 
+
+                scanner.next(); // Clear invalid input 
+
+                continue; 
+
+            } 
+
+             
+
+            //Menu 
+
+            switch (option) { 
+
+                case 1: 
+
+                    displayPriceScheme(); 
+
+                    break; 
+
+                case 2: 
+
+                    processOrder(packageClass1, locationClass1, satayOrder1); //passing in parameters 
+
+                    break; 
+
+                case 3: 
+
+                    generateSalesReport(); 
+
+                    break; 
+
+                case 4: 
+
+                    System.out.println("Thank you! Come again!"); 
+
+                    break; 
+
+                default: 
+
+                    System.out.println("Invalid option. Please try again."); 
+
+            } 
+
+        } while (option != 4); 
+
+  
+
+        scanner.close(); 
+
+    } 
+
+     
+
+    public static void displayPriceScheme() { 
+
+        System.out.println("--------------------------------------------------------------"); 
+
+        System.out.println("Package\t\t\tPax\t\t\tCharge(Per Day)"); 
+
+        System.out.println("Package A\t\t50\t\t\tRM35.00"); 
+
+        System.out.println("-8 dishes\t\t51-200\t\t\tRM33.00"); 
+
+        System.out.println("-2 desserts\t\t>200\t\t\tRM30.00"); 
+
+        System.out.println("Package B\t\t50\t\t\tRM50.00"); 
+
+        System.out.println("-12 dishes\t\t51-200\t\t\tRM48.00"); 
+
+        System.out.println("-4 desserts\t\t>200\t\t\tRM45.00"); 
+
+        System.out.println("--------------------------------------------------------------"); 
+
+        System.out.println("Location\t\t\t\t\tFee"); 
+
+        System.out.println("1. KL and Selangor\t\t\t\tRM0.00"); 
+
+        System.out.println("2. Perak, Negeri Sembilan and Malacca\t\tRM100.00"); 
+
+        System.out.println("3. Johor\t\t\t\t\tRM150.00"); 
+
+        System.out.println("--------------------------------------------------------------"); 
+
+        System.out.println("Satay Type\t\tPrice (per stick)"); 
+
+        System.out.println("Chicken\t\t\tRM0.80"); 
+
+        System.out.println("Lamb\t\t\tRM0.90"); 
+
+        System.out.println("Beef\t\t\tRM1.00"); 
+
+        System.out.println("--------------------------------------------------------------"); 
+
+    } 
+
+     
+
+     
+
+     
+
+    //pass in objects so that it is recognizable 
+
+    public static void processOrder(packageClass packageClass1, locationClass locationClass1, satayClass satayOrder1) { 
+
+        Scanner scanner = new Scanner(System.in); 
+
+        do { 
+
+            System.out.print("Enter package type (A/B): "); 
+
+            packageType = scanner.next().charAt(0); 
+
+        } while (packageType != 'A' && packageType != 'a' && packageType != 'B' && packageType != 'b'); 
+
+         
+
+        do { 
+
+            System.out.print("Enter amount of pax/guests: "); 
+
+            pax = scanner.nextInt(); 
+
+        } while (pax <= 0); 
+
+         
+
+        packageClass1.setPax(pax); 
+
+        packageClass1.setPackageType(packageType); 
+
+         
+
+        scanner.nextLine(); // Consume the leftover newline 
+
+  
+
+        String[] validLocations = {"kl", "selangor", "perak", "negeri sembilan", "malacca", "johor"}; 
+
+            do { 
+
+                System.out.print("Enter location choice: "); 
+
+                stateType = scanner.nextLine().toLowerCase(); 
+
+            } while (!Arrays.asList(validLocations).contains(stateType)); 
+
+  
+
+        locationClass1.setStateType(stateType); 
+
+  
+
+        System.out.print("Would you like to add-on satay? (Y/N) "); 
+
+        char satayChoice = scanner.next().charAt(0); 
+
+  
+
+        int satayCount = 0; 
+
+  
+
+       if (satayChoice == 'Y' || satayChoice == 'y') { 
+
+            do { 
+
+                System.out.println("Select Satay Type: "); 
+
+                System.out.println("Choose C for Chicken"); 
+
+                System.out.println("Choose L for Lamb"); 
+
+                System.out.println("Choose B for Beef"); 
+
+                System.out.print("Satay Type: "); 
+
+                char type = scanner.next().charAt(0); 
+
+                while (type != 'C' && type != 'c' && type != 'L' && type != 'l' && type != 'B' && type != 'b') { 
+
+                    System.out.println("Invalid input. Choose C for Chicken, L for Lamb, or B for Beef."); 
+
+                    type = scanner.next().charAt(0); 
+
+                } 
+
+                satayTypes[satayCount] = type; 
+
+  
+
+                System.out.print("Enter satay quantity: "); 
+
+                int quantity = 0; 
+
+                while (!scanner.hasNextInt() || (quantity = scanner.nextInt()) <= 0) { 
+
+                    System.out.println("Invalid input. Please enter a positive integer."); 
+
+                    scanner.next(); // Clear invalid input 
+
+                } 
+
+                satayTypes[satayCount] = type; 
+
+  
+
+                System.out.print("Enter satay quantity: "); 
+
+                int quantity = scanner.nextInt(); 
+
+                satayQuantities[satayCount] = quantity; // Stores satayQuantity 
+
+                satayCount++; // Increment 
+
+  
+
+                System.out.print("Would you like to add another type of satay? (Y/N) "); 
+
+                satayChoice = scanner.next().charAt(0); 
+
+            } while (satayChoice == 'Y' || satayChoice == 'y' && satayCount < 3); 
+
+             
+
+            // Calculate total cost including satay 
+
+            totalCost = packageClass1.calcCostPerPax() + satayOrder1.calculateTotalCost() + locationClass1.calcLocationFee(); 
+
+  
+
+            // Adding sales and service taxes 
+
+            totalCost += totalCost * 0.06; // 6% sales tax 
+
+            totalCost += totalCost * 0.08; // 8% service tax 
+
+  
+
+            // Output order summary 
+
+            System.out.println("----------------------------------"); 
+
+            System.out.println("\t ORDER SUMMARY"); 
+
+            System.out.println("----------------------------------"); 
+
+            System.out.println("Package Selected: " + packageType); 
+
+            System.out.println("Number of Pax/Guests: " + pax); 
+
+            System.out.println("Location Choice: " + stateType); 
+
+            System.out.println("Satay Options: "); 
+
+            for (int i = 0; i < satayCount; i++) { 
+
+                System.out.println("Satay Type: " + Character.toUpperCase(satayTypes[i]) + "\nSatay Quantity: " + satayQuantities[i]); 
+
+            } 
+
+  
+
+            System.out.println("Total Cost: RM" + String.format("%.2f", totalCost)); 
+
+            System.out.println("----------------------------------"); 
+
+        } else if (satayChoice == 'N' || satayChoice == 'n') { 
+
+            // Calculate total cost without satay 
+
+            totalCost = packageClass1.calcCostPerPax() + locationClass1.calcLocationFee(); 
+
+  
+
+            totalCost += totalCost * 0.06; // 6% sales tax 
+
+            totalCost += totalCost * 0.08; // 8% service tax 
+
+             
+
+            // Output order summary 
+
+            System.out.println("----------------------------------"); 
+
+            System.out.println("\t ORDER SUMMARY"); 
+
+            System.out.println("----------------------------------"); 
+
+            System.out.println("Package Selected: " + packageType); 
+
+            System.out.println("Number of Pax/Guests: " + pax); 
+
+            System.out.println("Location Choice: " + stateType); 
+
+            System.out.println("Total Cost: RM" + String.format("%.2f", totalCost)); 
+
+            System.out.println("----------------------------------"); 
+
+        } else { 
+
+            System.out.println("Invalid option."); 
+
+        } 
+
+         
+
+        int packageIndex; 
+
+            if (packageType == 'A' || packageType == 'a') { 
+
+                packageIndex = 0; //it will store values in the 1st row 
+
+            } 
+
+            else { 
+
+                 packageIndex = 1; //it will store values in the 2nd row 
+
+            } 
+
+        salesData[packageIndex][0]++; // Increment package count 
+
+        salesData[packageIndex][1] += pax; // Add to total pax 
+
+        salesData[packageIndex][2] += totalCost; // Add to total cost 
+
+         
+
+        //satay quantity  
+
+        for (int i = 0; i < satayCount; i++) { 
+
+            switch (Character.toUpperCase(satayTypes[i])) { 
+
+                case 'C': 
+
+                    salesData[packageIndex][3] += satayQuantities[i]; 
+
+                    break; 
+
+                case 'L': 
+
+                    salesData[packageIndex][4] += satayQuantities[i]; 
+
+                    break; 
+
+                case 'B': 
+
+                    salesData[packageIndex][5] += satayQuantities[i]; 
+
+                    break; 
+
+            } 
+
+        }    
+
+  
+
+    } 
+
+     
+
+     public static void generateSalesReport() { 
+
+        System.out.println("--------------------------------------------------------------------------------------"); 
+
+        System.out.println("\t\t\t\t SALES REPORT SUMMARY"); 
+
+        System.out.println("--------------------------------------------------------------------------------------"); 
+
+        System.out.println("Package\t  Number of Orders\tTotal Pax   Chicken\tLamb\tBeef\tTotal Cost"); 
+
+        System.out.println("--------------------------------------------------------------------------------------"); 
+
+         
+
+        //printing out the amount of packages ordered 
+
+        System.out.println("Package A\t" + salesData[0][0] + "\t\t" + salesData[0][1] + "\t\t" + salesData[0][3] + "\t" + salesData[0][4] + "\t" + salesData[0][5] + "\tRM" + String.format("%.2f", (double)salesData[0][2])); 
+
+        System.out.println("Package B\t" + salesData[1][0] + "\t\t" + salesData[1][1] + "\t\t" + salesData[1][3] + "\t" + salesData[1][4] + "\t" + salesData[1][5] + "\tRM" + String.format("%.2f", (double)salesData[1][2])); 
+
+        System.out.println("--------------------------------------------------------------------------------------"); 
+
+         
+
+        //calculation for totals 
+
+        int totalPackageOrder = salesData[0][0] + salesData[1][0]; 
+
+        int totalPax = salesData[0][1] + salesData[1][1]; 
+
+        double totalCostSales = (double)salesData[0][2] + (double)salesData[1][2]; 
+
+        int totalChicken = salesData[0][3] + salesData[1][3]; 
+
+        int totalLamb = salesData[0][4] + salesData[1][4]; 
+
+        int totalBeef = salesData[0][5] + salesData[1][5]; 
+
+         
+
+        System.out.println("Total\t\t" + totalPackageOrder + "\t\t" + totalPax + "\t\t" + totalChicken + "\t" + totalLamb + "\t" + totalBeef+ "\tRM" + String.format("%.2f", totalCostSales)); 
+
+        System.out.println("--------------------------------------------------------------------------------------"); 
+
+         
+
+         
+
+    } 
+
+      
+
+      
+
+} 
